@@ -15,6 +15,15 @@
   // Navbar Component
   var Navbar  = React.createClass({
     render: function () {
+      var aboutTabClass, homeTabClass;
+
+      if(this.props.page === 'home') {
+        homeTabClass = 'active';
+      }
+      else if(this.props.page == 'about') {
+        aboutTabClass = 'active';
+      }
+
       return (
         <nav className="navbar navbar-default">
           <div className="container-fluid">
@@ -29,8 +38,12 @@
             </div>
             <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul className="nav navbar-nav">
-                <li className="active"><a href="#">Home <span className="sr-only">(current)</span></a></li>
-                <li><a href="#">About</a></li>
+                <li className={homeTabClass}>
+                  <a href="#" onClick={this.props.setPageState('home')}>Home <span className="sr-only">(current)</span></a>
+                </li>
+                <li className={aboutTabClass}>
+                  <a href="#" onClick={this.props.setPageState('about')}>About</a>
+                </li>
               </ul>
             </div>
           </div>
@@ -92,10 +105,25 @@
   });
 
   var App = React.createClass({
+    getInitialState: function () {
+      return {
+        page: 'home'
+      };
+    },
+    setPageState: function (pageState) {
+      var self = this;
+      return function () {
+        self.setState({
+          page: pageState
+        });
+      }
+    },
     render: function () {
       return (
         <div>
-          <Navbar />
+          <Navbar
+            page={this.state.page}
+            setPageState={this.setPageState} />
           <Jumbotron />
           <PageHome />
           <Footer />
